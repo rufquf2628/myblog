@@ -1,0 +1,182 @@
+---
+title: "What is Regressor Model"
+author: "Hangyul Kim"
+date: "11/27/2023"
+format:
+    html:
+      code-fold: false
+jupyter: python3
+---
+
+
+Linear Regression model is a supervised Machine Learning model. It predicts a dependent variable, y, based on an independent variable, X.
+The relation between X and y becomes a straight line to predict future data point. Because of these trait, it is best to predict continuous data set.
+
+
+## Types of Linear Regression Model
+
+There are many types of linear regression model.
+
+### 1. Simple Linear Regression
+
+Simple Linear Regression is a basic machine learning model with only two variables using a straight line. In the equation below, y is a dependent variable, alpha is y-interccept, beta is slope, and X is a independent variable.
+
+$$
+y=\alpha +\beta X
+$$
+
+Let's check with actual example.
+
+#### Importing the libraries
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+
+#### Importing the dataset
+
+Our dataset is Salary Data which contains the average salary information based on years of experience. In this dataset, our independent variable, X, is a years of experience and our independent variable, y, is a salary.
+
+Let's think about a simple question. Can we predict someone's salary based on his years of experience? Assume that you try to find an employee to work on your company and finally see a suitable candidate who already has work experience of 3.5 years. How much salary you need to pay for him?
+
+Let's use our simple linear regression model to find the suitable salary for him.
+
+```{python}
+dataset1 = pd.read_csv('../dataset/Salary_Data.csv')
+dataset1
+```
+
+```{python}
+X = dataset1.iloc[:, :-1].values
+y = dataset1.iloc[:, -1].values
+```
+
+Now, we split our dataset into test set and train set.
+We use sklearn train_test_split to manually split dataset.
+The size of test set gonna be one third of dataset.
+
+```{python}
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1/3, random_state=0)
+```
+
+#### Training the Simple Linear Regression model
+
+```{python}
+#| tags: []
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+```
+
+Now, we have our simple linear regression model that is fitted with our training set. We can predict y value by using this regressor model to predict with our test set.
+
+```{python}
+y_pred = regressor.predict(X_test)
+```
+
+#### Visualising the results
+
+```{python}
+import matplotlib.pyplot as plt
+
+plt.scatter(X_train, y_train, color='red')
+plt.plot(X_train, regressor.predict(X_train), color='blue')
+plt.title('Salary vs Experience (Training set)')
+plt.xlabel('Years of Experience')
+plt.ylabel('Salary')
+plt.show()
+```
+
+This is our training set result by simple linear regression model. As we seen above, the red scattered points are actual dataset of our training set, and blue straight line is our simple linear equation driven from our model.
+
+With this equation and graph, we can predict our test set also.
+
+```{python}
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Experience (Test set)')
+plt.xlabel('Years of Experience')
+plt.ylabel('Salary')
+plt.show()
+```
+
+Let's go back to our question. Can we now determine how much salary for the 3.5 years of experience employee?
+
+```{python}
+y_salary = regressor.predict([[3.5]])
+print(y_salary)
+```
+
+Our regressor model determines to pay him almost 59500 dollar which seems reasonable to both you and him.
+
+### 2. Multiple Linear Regression
+
+Now, let's move on to the other linear regression model, Multiple Linear Regression.
+
+Multiple Linear Regression model predicts the relationship between a dependent variable and "two or more" independent variables using a straight line. In the equation below, $y$ is a dependent variable that model gonna predict and $X_1$ ~ $X_n$ are independent variables to make a straight line.
+
+$$
+y=\alpha +\beta_1 X_1 +\beta_2 X_2 +... + \beta_n X_n
+$$
+
+Let's move on to the actual example.
+
+#### Importing the dataset
+
+Since we already implemented libraries previously, we only need to import the dataset. Our dataset for the multiple linear regression model is the profits of 50 startup companies with their strategies of R&D spend, Administration, Marketing spend, and state. By generating a straight line with these dataset, we can predict a new company's profit with its strategy.
+
+```{python}
+dataset2 = pd.read_csv('../dataset/50_Startups.csv')
+dataset2
+```
+
+```{python}
+X = dataset2.iloc[:, :-1].values
+y = dataset2.iloc[:, -1].values
+```
+
+#### Encoding categorical data
+
+In the dataset, there is a "State" data which consists of three states: New York, California, and Florida. Since a machine learning model only takes numeric data, we need to change this string data into numeric data. Sklearn provides ColumnTransformer and OneHotEncoder libraries to handle this data encoding.
+
+```{python}
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])], remainder='passthrough')
+X = np.array(ct.fit_transform(X))
+```
+
+```{python}
+print(X)
+```
+
+As it shown above, each state data is converted into three columns data.
+
+California is converted into "1.0 0.0 0.0"
+
+Florida is converted into "0.0 1.0 0.0"
+
+New York is converted into "0.0 0.0 1.0"
+
+So that, our ML model can recognize each states information with these numeric data.
+
+```{python}
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+```
+
+```{python}
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+```
+
+```{python}
+y_pred = regressor.predict(X_test)
+np.set_printoptions(precision=2)
+print(np.concatenate((y_pred.reshape(len(y_pred),1), y_test.reshape(len(y_test),1)),1))
+```
+
+Now, similar with simple linear regression, we can predict our test set with multiple linear regression model.
+

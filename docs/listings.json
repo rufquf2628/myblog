@@ -1,0 +1,22 @@
+[
+  {
+    "listing": "/blog.html",
+    "items": [
+      "/posts/Classification/ClassificationModel.html",
+      "/posts/Clustering/Clustering.html",
+      "/posts/Regressor/RegressorModel.html",
+      "/posts/post-with-code/index.html",
+      "/posts/welcome/index.html"
+    ]
+  },
+  {
+    "listing": "/archive.html",
+    "items": [
+      "/posts/Classification/ClassificationModel.html",
+      "/posts/Clustering/Clustering.html",
+      "/posts/Regressor/RegressorModel.html",
+      "/posts/post-with-code/index.html",
+      "/posts/welcome/index.html"
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "blog.qmd": {
+    "blog.html": "02b63cd7"
+  },
+  "index.qmd": {
+    "index.html": "238359aa"
+  },
+  "posts/post-with-code/index.qmd": {
+    "index.html": "580df02d"
+  },
+  "posts/welcome/index.qmd": {
+    "index.html": "0e80a786"
+  },
+  "posts/Clustering/Clustering.qmd": {
+    "Clustering.html": "59bb3b23"
+  },
+  "archive.qmd": {
+    "archive.html": "bfd8e741"
+  },
+  "posts/Classification/ClassificationModel.qmd": {
+    "ClassificationModel.html": "1bc26dc2"
+  },
+  "posts/Regressor/RegressorModel.qmd": {
+    "RegressorModel.html": "77697563"
+  }
+}

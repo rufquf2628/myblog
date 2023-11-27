@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "CS5805 - Project"
+  description: "This is Blog posting for Virginia Tech CS5805 class."
+  navbar:
+    right:
+      - text: Blog
+        href: blog.qmd
+      - icon: github
+        href: https://github.com/rufquf2628
+format:
+  html:
+    theme: theme.css
+
+
+

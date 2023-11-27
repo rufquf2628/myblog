@@ -1,0 +1,137 @@
+---
+title: "What is Classfication Model"
+author: "Hangyul Kim"
+date: "11/27/2023"
+image: knn.png
+format:
+    html:
+      code-fold: false
+jupyter: python3
+---
+
+
+Classification is a supervised machine learning model that can predict the correct "label" of a given input data. Model is fully trained with the given dataset and corresponding label to it.
+
+In this section, we build a model that can predict that a customer gonna purchase our product with its age and estimated salary. So, in this model, age and estimated salary gonna be an input data, and purchase gonna be a label.
+
+
+## K-Nearest Neighbors algorithm
+
+K-Nearest Neighbors (KNN) is one of the most basic classification algorithm. In the classification phase, a user defines a hyper-parameter "k" which is the number of nearest data of each points. Simply, the model predicts which label is assigned to the input data by looking "k" nearest points of the input data.
+
+![KNN.png](knn.png)
+
+In the figure above, k is 5. So, the new data point looks for 5 nearest points and predicts that is is blue label.
+
+#### Importing the libraries and dataset
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+
+```{python}
+dataset = pd.read_csv('../dataset/Social_Network_Ads.csv')
+dataset
+```
+
+As stated above, our dataset, "Social Network Ads" contains 400 data of customers age, estimated salary, and wheather they purchased or not.
+
+Now, we split our dataset into train and test set as we done in regression model.
+
+```{python}
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+```
+
+```{python}
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1/4, random_state=0)
+```
+
+#### Feature Scaling
+
+As we seen in dataset, we have two input data includes age and estimated salary. Although age is ranged between 10 to 90, estimated salary is ranged between 10000 to 40000; the scale of two inputs are different.
+
+So, we need to do feature scaling of these data into the range between [-2.0 to 2.0]. StandardScaler library in sklearn will be helpful to handle this.
+
+```{python}
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+```
+
+#### Training the KNN model
+
+Now, we train our KNN model with training dataset.
+
+```{python}
+#| tags: []
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)
+classifier.fit(X_train, y_train)
+```
+
+```{python}
+print(classifier.predict(sc.transform([[30,87000]])))
+```
+
+With our trained KNN model, we can predict a specific customer whose age is 30 and estimated salary is 87000 gonna purchase our product. Our model predicts that he don't purchase our product.
+
+#### Making the Confusion Matrix
+
+Also, we can see how accurate our model is with the confusion matrix provided by sklearn.
+
+```{python}
+from sklearn.metrics import confusion_matrix, accuracy_score
+y_pred = classifier.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test, y_pred)
+```
+
+By compareing our predicted test set result and actual result, we can get a accuracy score.
+
+Our model shows that it is 93 percent correct in our test set.
+
+#### Visualising the results
+
+```{python}
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+
+X_set, y_set = sc.inverse_transform(X_train), y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 10, stop = X_set[:, 0].max() + 10, step = 1),
+                     np.arange(start = X_set[:, 1].min() - 1000, stop = X_set[:, 1].max() + 1000, step = 1))
+plt.contourf(X1, X2, classifier.predict(sc.transform(np.array([X1.ravel(), X2.ravel()]).T)).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('salmon', 'dodgerblue')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1], c = ListedColormap(('salmon', 'dodgerblue'))(i), label = j)
+plt.title('K-NN (Training set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+```
+
+```{python}
+from matplotlib.colors import ListedColormap
+X_set, y_set = sc.inverse_transform(X_test), y_test
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 10, stop = X_set[:, 0].max() + 10, step = 1),
+                     np.arange(start = X_set[:, 1].min() - 1000, stop = X_set[:, 1].max() + 1000, step = 1))
+plt.contourf(X1, X2, classifier.predict(sc.transform(np.array([X1.ravel(), X2.ravel()]).T)).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('salmon', 'dodgerblue')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1], c = ListedColormap(('salmon', 'dodgerblue'))(i), label = j)
+plt.title('K-NN (Test set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+```
+
