@@ -8,15 +8,5 @@
       "/posts/Regressor/RegressorModel.html",
       "/posts/welcome/index.html"
     ]
-  },
-  {
-    "listing": "/archive.html",
-    "items": [
-      "/posts/Probability/Probability.html",
-      "/posts/Classification/ClassificationModel.html",
-      "/posts/Clustering/Clustering.html",
-      "/posts/Regressor/RegressorModel.html",
-      "/posts/welcome/index.html"
-    ]
   }
 ]

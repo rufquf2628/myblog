@@ -1,5 +1,5 @@
 ---
-title: "1. Probability Theory and Random Variable"
+title: "Probability Theory and Random Variable"
 author: "Hangyul Kim"
 date: "11/28/2023"
 image: "pdf.png"

@@ -1,16 +1,12 @@
 ---
-title: "myblog"
+title: "Machine Learning Posts"
 listing:
-  contents: posts/**/*.qmd
+  contents: posts
   sort: "date desc"
   type: default
   categories: true
-  sort-ui: true
-  filter-ui: true
-  fields: [date, title, reading-time, description, categories]
-  feed: true
+  sort-ui: false
+  filter-ui: false
 page-layout: full
-title-block-banner: false
+title-block-banner: true
 ---
-
-

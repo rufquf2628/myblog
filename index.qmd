@@ -16,4 +16,4 @@ about:
 
 ---
 
-About this blog
+This is blog for Virginia Tech CS 5805 class project of Hangyul Kim.
