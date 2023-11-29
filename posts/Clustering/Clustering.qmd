@@ -3,6 +3,7 @@ title: "What is Clustering Model"
 author: "Hangyul Kim"
 date: "11/27/2023"
 image: "kmeans.png"
+categories: [ML]
 format:
     html:
       code-fold: false

@@ -3,6 +3,7 @@ title: "What is Classfication Model"
 author: "Hangyul Kim"
 date: "11/27/2023"
 image: knn.png
+categories: [ML]
 format:
     html:
       code-fold: false

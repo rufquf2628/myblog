@@ -2,11 +2,11 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/Detection/Detection.html",
       "/posts/Probability/Probability.html",
       "/posts/Classification/ClassificationModel.html",
       "/posts/Clustering/Clustering.html",
-      "/posts/Regressor/RegressorModel.html",
-      "/posts/welcome/index.html"
+      "/posts/Regressor/RegressorModel.html"
     ]
   }
 ]

@@ -3,6 +3,7 @@ title: "Probability Theory and Random Variable"
 author: "Hangyul Kim"
 date: "11/28/2023"
 image: "pdf.png"
+categories: [ML]
 format:
     html:
       code-fold: false

@@ -2,6 +2,7 @@
 title: "What is Regressor Model"
 author: "Hangyul Kim"
 date: "11/27/2023"
+categories: [ML]
 format:
     html:
       code-fold: false

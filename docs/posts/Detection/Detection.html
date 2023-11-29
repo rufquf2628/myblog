@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Tristan O’Malley">
-<meta name="dcterms.date" content="2023-11-24">
+<meta name="author" content="Hangyul Kim">
+<meta name="dcterms.date" content="2023-11-28">
 
-<title>CS5805 - Project - Welcome To My Blog</title>
+<title>CS5805 - Project - Anomaly / Outlier Detection</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -61,6 +95,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -103,16 +140,24 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#anomaly-detection" id="toc-anomaly-detection" class="nav-link active" data-scroll-target="#anomaly-detection">Anomaly Detection</a></li>
+  <li><a href="#outlier-detection" id="toc-outlier-detection" class="nav-link" data-scroll-target="#outlier-detection">Outlier Detection</a></li>
+  <li><a href="#anomaly-outlier-detection-in-support-vector-machine" id="toc-anomaly-outlier-detection-in-support-vector-machine" class="nav-link" data-scroll-target="#anomaly-outlier-detection-in-support-vector-machine">Anomaly / Outlier Detection in Support Vector Machine</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Welcome To My Blog</h1>
+<h1 class="title">Anomaly / Outlier Detection</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">news</div>
+    <div class="quarto-category">ML</div>
   </div>
   </div>
 
@@ -123,14 +168,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Tristan O’Malley </p>
+             <p>Hangyul Kim </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 24, 2023</p>
+      <p class="date">November 28, 2023</p>
     </div>
   </div>
   
@@ -140,11 +185,135 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>This is the first post in a Quarto blog. Welcome!</p>
-<p><img src="thumbnail.jpg" class="img-fluid"></p>
-<p>Since this post doesn’t specify an explicit <code>image</code>, the first image in the post will be used in the listing page of posts.</p>
+<p>In Machine Learning field, Anomaly detection and Outlier Detection are used during the Data Understanding and Data Pre-processing stages. They are used in wide range of field such as credit card, insurance, or even in military field.</p>
+<section id="anomaly-detection" class="level3">
+<h3 class="anchored" data-anchor-id="anomaly-detection">Anomaly Detection</h3>
+<p>Anomalies are reffered as the data points that do not conforrm to an expected pattern of other data points. So, the anomalies can be defined as weird data points comparing with the others.</p>
+<p>Anomalies might be occured for a various reasons such as malicious activity, cyber-intrusion, or breakdown of system. Since they occur not in common situation, it would be pretty interesting to analyse anomalies point.</p>
+<p>Therefore, Anomaly detection refers to the way of finding patterns in data that contains such anomalies.</p>
+</section>
+<section id="outlier-detection" class="level3">
+<h3 class="anchored" data-anchor-id="outlier-detection">Outlier Detection</h3>
+<p>Outlier is a rare chance of occurrence within the dataset. The Outlier is an observation point that is far from the others. It may indicate experimental error in the dataset. Outlier should be the most extream point like minimum or maximum, or both of them.</p>
+<p>Therefore, Outlier detection refers to the way of finding a data that is far from the others.</p>
+<section id="anomaly-vs-outlier" class="level4">
+<h4 class="anchored" data-anchor-id="anomaly-vs-outlier">Anomaly vs Outlier</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="detection.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">detection.png</figcaption>
+</figure>
+</div>
+<p>As seen above, Anomalies are treated as pattern although Outlier is only a data point.</p>
+</section>
+</section>
+<section id="anomaly-outlier-detection-in-support-vector-machine" class="level3">
+<h3 class="anchored" data-anchor-id="anomaly-outlier-detection-in-support-vector-machine">Anomaly / Outlier Detection in Support Vector Machine</h3>
+<p>The Support Vector Machine (SVM) is a supervised machine learning used in classification. SVM trains the dataset with two categories. An algorithm of SVM assigns a new input into one of these categories.</p>
+<p>Since SVM model check the range of each category, anomalies can be determined by checking the points outside of the range.</p>
+<section id="importing-the-libraries-and-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="importing-the-libraries-and-dataset">Importing the libraries and dataset</h4>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"../dataset/iris.csv"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> data[[<span class="st">"sepal_length"</span>, <span class="st">"sepal_width"</span>]]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       sepal_length  sepal_width
+count    150.000000   150.000000
+mean       5.843333     3.054000
+std        0.828066     0.433594
+min        4.300000     2.000000
+25%        5.100000     2.800000
+50%        5.800000     3.000000
+75%        6.400000     3.300000
+max        7.900000     4.400000</code></pre>
+</div>
+</div>
+</section>
+<section id="training-and-predict-model" class="level4">
+<h4 class="anchored" data-anchor-id="training-and-predict-model">Training and Predict model</h4>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> OneClassSVM</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> OneClassSVM(kernel<span class="op">=</span><span class="st">'rbf'</span>, gamma<span class="op">=</span><span class="fl">0.001</span>, nu<span class="op">=</span><span class="fl">0.05</span>).fit(df)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here, parameter ‘nu’ in OneClassSVM refers the estimated proportion of outliers in this data. So, in this dataset, we predict 5% of the data gonna be anomalies.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>anomalies <span class="op">=</span> df.iloc[np.where(y_pred <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>)]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>anomalies</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
 
 
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sepal_length</th>
+<th data-quarto-table-cell-role="th">sepal_width</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>4.4</td>
+<td>2.9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>4.3</td>
+<td>3.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">41</td>
+<td>4.5</td>
+<td>2.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">117</td>
+<td>7.7</td>
+<td>3.8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">118</td>
+<td>7.7</td>
+<td>2.6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">131</td>
+<td>7.9</td>
+<td>3.8</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="visualising-the-results" class="level4">
+<h4 class="anchored" data-anchor-id="visualising-the-results">Visualising the results</h4>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">"sepal_length"</span>], df[<span class="st">"sepal_width"</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(anomalies[<span class="st">"sepal_length"</span>], anomalies[<span class="st">"sepal_width"</span>], c<span class="op">=</span><span class="st">"r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>&lt;matplotlib.collections.PathCollection at 0x208dcc18ac0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Detection_files/figure-html/cell-5-output-2.png" width="571" height="413"></p>
+</div>
+</div>
+<p>Here. the red dots among the blue dots represent anomalies in this dataset. Since we predict 5% of dataset into anomalies, only 5 data points seems to be red.</p>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
