@@ -1,7 +1,8 @@
 [
   {
-    "listing": "/archive.html",
+    "listing": "/blog.html",
     "items": [
+      "/posts/Probability/Probability.html",
       "/posts/Classification/ClassificationModel.html",
       "/posts/Clustering/Clustering.html",
       "/posts/Regressor/RegressorModel.html",
@@ -9,8 +10,9 @@
     ]
   },
   {
-    "listing": "/blog.html",
+    "listing": "/archive.html",
     "items": [
+      "/posts/Probability/Probability.html",
       "/posts/Classification/ClassificationModel.html",
       "/posts/Clustering/Clustering.html",
       "/posts/Regressor/RegressorModel.html",

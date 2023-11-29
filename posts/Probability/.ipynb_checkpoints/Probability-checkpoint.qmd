@@ -1,0 +1,89 @@
+---
+title: "1. Probability Theory and Random Variable"
+author: "Hangyul Kim"
+date: "11/28/2023"
+image: "pdf.png"
+format:
+    html:
+      code-fold: false
+jupyter: python3
+---
+
+
+Probability theory is a one of the branches in mathematics that optimize of random phenomena. The word "Probability" is defined in mathematics that "The extent to wihch an event is likely to occur." In real world, the probability is used in case of coin tossing, card game, and rolling dice.
+
+Therefore, probability is a possible outcome derived from a event. There are many probability models in theory: random variable, normal distribution, and standard deviation, etc.
+
+
+#### Random Variable
+
+Random variable, occationally denoted as $X$, is a random number with probabilities assigned to outcomes. For example, let $X$ be a outcome of tossing a coin. A model is to assign probability of 1/2 to the head and tail equally.
+
+Also, an event is a set of possible outcomes which denoted as $E$. So, in the previous example, the event that the coin will be the head can be annoted as $E = \{X = head\} = \{1\}$ (where 0 means tail, 1 means head).
+
+Finally, the probability that of the event that the coin will be the head can be shown as $P(E) = P(X = head) = 1/2$.
+
+## Types of Random Variable
+
+#### Discrete Random Variable
+
+Discrete random variable, $X$, is a list of all its possible outcomes which contains $x_1,x_2,\ldots$. Discrete random variable is specified by probability $p_i = P[X = x_i ]$, for $i = 0,1,2,\ldots$.
+
+For the coin toss example, let's consider we toss the coin three times. If discrete random variable $X$ represents the number of heads during the tossing, $X$ can be the values of $0,1,2,$ or $3$. The possibility of coins should be TTT, TTH, THT, HTT, THH, HTH, HHT, and HHH. By counting the number of heads, we can find the probabilities.
+
+$p_0 = P[X = x_0] = 1/8$ $\newline$
+$p_1 = P[X = x_1] = 3/8$ $\newline$
+$p_2 = P[X = x_2] = 3/8$ $\newline$
+$p_3 = P[X = x_3] = 1/8$ $\newline$
+
+#### Probability Mass Function (PMF)
+
+Discrete random variable can be expressed with Probability Mass Function (PMF). It shows x axis as $x_i$ and y axis as $P(X)$. So, in our coin toss example, x axis would be the number of heads and y axis would be the probabilities of each x.
+
+```{python}
+import matplotlib.pyplot as plt
+
+X = [0, 1, 2, 3]
+Y = [1/8, 3/8, 3/8, 1/8]
+
+plt.bar(X, Y, width=0.3)
+plt.xticks([0, 1, 2, 3])
+plt.yticks([1/8,2/8,3/8,4/8],[r'$\frac{1}{8}$',r'$\frac{2}{8}$',r'$\frac{3}{8}$',r'$\frac{4}{8}$'])
+plt.xlabel("x, Number of Heads")
+plt.ylabel("P(x), Probability of x")
+plt.show()
+```
+
+#### Continuous Random Variable
+
+Continuous Random Variable, $X$, is a random variable that can only be countinuous values. Continuous values should be uncountable and interval of the real numbers. So, the variable such as height, weight, and temperature can be countinuous variables.
+
+Continuous random variable $X$ can be defined with $f(x)$ which is integrated of $X$ in any interval.
+
+$P(a < X < b) = \int_{a}^{b} f(x) \,dx$
+
+#### Probability Density Function (PDF)
+
+For the Continuous Random Variable, the Probability Density Function (PDF) is used to represent. Since the continuous random variable represents the range of uncountable numbers, the graph also represents the space of certain range of x.
+
+![pdf.png](pdf.png)
+
+```{python}
+import numpy as np
+from scipy.stats import norm
+
+sample = np.random.normal(loc=50, scale=5, size=1000)
+mean = np.mean(sample)
+std = np.std(sample)
+dist = norm(mean, std)
+
+values = [value for value in range(30, 70)]
+probailities = [dist.pdf(value) for value in values]
+
+plt.xlabel('x')
+
+plt.hist(sample, bins = 10, density=True)
+plt.plot(values, probailities)
+plt.show()
+```
+
